@@ -18,8 +18,6 @@ UnbufferedSerial uartUsb(USBTX, USBRX, 115200);
 
 //=====[Declaration and initialization of public global variables]=============
 
-bool canIgnite = false;
-
 //=====[Declarations (prototypes) of public functions]=========================
 
 void inputsInit();
@@ -87,17 +85,16 @@ void errorMessage() {
 }
 
 void checkIgnition() {
-    if (driverSeatButton && driverBeltButton && passSeatButton && passBeltButton ) {
-        canIgnite = true;
+    if (driverSeatButton && driverBeltButton && passSeatButton && passBeltButton && engineLed) {
         ignitionLed = ON;
     }
     else {
-        canIgnite = false;
+        ignitionLed=OFF;
     }
 }
 
 void onIgnition() {
-    if (canIgnite) {
+    if (ignitionLed) {
         ignitionLed = OFF;
         engineLed = ON;
         engineStartMessage();
