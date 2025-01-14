@@ -85,7 +85,7 @@ void errorMessage() {
 }
 
 void checkIgnition() {
-    if (driverSeatButton && driverBeltButton && passSeatButton && passBeltButton && engineLed) {
+    if (driverSeatButton && driverBeltButton && passSeatButton && passBeltButton && !engineLed) {
         ignitionLed = ON;
     }
     else {
