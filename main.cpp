@@ -70,17 +70,18 @@ void engineStartMessage() {
 }
 
 void errorMessage() {
+    uartUsb.write("Ignition inhibited.\r\n", 21);
     if (!driverSeatButton) {
-        uartUsb.write( "Engine started.\r\n", 17 );
+        uartUsb.write( "Driver seat not occupied.\r\n", 27 );
     }
     if (!driverBeltButton) {
-        uartUsb.write( "Engine started.\r\n", 17 );
+        uartUsb.write( "Driver seatbelt not fastened.\r\n", 31 );
     }
     if (!passSeatButton) {
-        uartUsb.write( "Engine started.\r\n", 17 );
+        uartUsb.write( "Passenger seat not occupied.\r\n", 30 );
     }
     if (!passBeltButton) {
-        uartUsb.write( "Engine started.\r\n", 17 );
+        uartUsb.write( "Passenger seatbelt not fastened.\r\n", 34 );
     }
 }
 
