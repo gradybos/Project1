@@ -11,6 +11,7 @@ DigitalIn driverBeltButton(D5);
 DigitalIn passSeatButton(D6);
 DigitalIn passBeltButton(D7);
 
+DigitalOut alarm(PE_10);
 DigitalOut ignitionLed(LED1);
 DigitalOut engineLed(LED2);
 
@@ -39,7 +40,7 @@ int main()
     welcomeMessage();
     while (true) {
         checkIgnition();
-        if (ignitionButton) {
+        if (ignitionButton && !alarm && !engineLed) {
             onIgnition();
         }
     }
@@ -59,6 +60,7 @@ void outputsInit()
 {
     ignitionLed = OFF;
     engineLed = OFF;
+    alarm = OFF;
 }
 
 void welcomeMessage() {
@@ -101,6 +103,7 @@ void onIgnition() {
         engineStartMessage();
     }
     else {
+        alarm = ON;
         errorMessage();
     }
 }
