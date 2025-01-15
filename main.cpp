@@ -11,13 +11,15 @@ DigitalIn driverBeltButton(D5);
 DigitalIn passSeatButton(D6);
 DigitalIn passBeltButton(D7);
 
-DigitalOut alarm(PE_10);
+DigitalInOut alarm(PE_10);
 DigitalOut ignitionLed(LED1);
 DigitalOut engineLed(LED2);
 
 UnbufferedSerial uartUsb(USBTX, USBRX, 115200);
 
 //=====[Declaration and initialization of public global variables]=============
+
+bool alarmState = OFF;
 
 //=====[Declarations (prototypes) of public functions]=========================
 
@@ -40,7 +42,7 @@ int main()
     welcomeMessage();
     while (true) {
         checkIgnition();
-        if (ignitionButton && !alarm && !engineLed) {
+        if (ignitionButton && alarmState == OFF && !engineLed) {
             onIgnition();
         }
     }
@@ -54,13 +56,14 @@ void inputsInit()
     driverBeltButton.mode(PullDown);
     passSeatButton.mode(PullDown);
     passBeltButton.mode(PullDown);
+    alarm.mode(OpenDrain);
+    alarm.input();
 }
 
 void outputsInit()
 {
     ignitionLed = OFF;
     engineLed = OFF;
-    alarm = OFF;
 }
 
 void welcomeMessage() {
@@ -92,7 +95,7 @@ void checkIgnition() {
         ignitionLed = ON;
     }
     else {
-        ignitionLed=OFF;
+        ignitionLed = OFF;
     }
 }
 
@@ -103,7 +106,9 @@ void onIgnition() {
         engineStartMessage();
     }
     else {
-        alarm = ON;
         errorMessage();
+        alarm.output();
+        alarm = LOW;
+        alarmState = ON;
     }
 }
