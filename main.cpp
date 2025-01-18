@@ -41,9 +41,9 @@ int main()
     outputsInit();
     welcomeMessage();
     while (true) {
-        checkIgnition();
-        if (ignitionButton && alarmState == OFF && !engineLed) {
-            onIgnition();
+        checkIgnition(); 
+        if (ignitionButton && !alarmState && !engineLed) {
+            onIgnition(); 
         }
     }
 }
@@ -67,14 +67,17 @@ void outputsInit()
 }
 
 void welcomeMessage() {
+    // Display welcome message
     uartUsb.write( "Welcome to enhanced alarm system model 218-W24\r\n", 48 );
 }
 
 void engineStartMessage() {
+    // Display successful engine start message
     uartUsb.write( "Engine started.\r\n", 17 );
 }
 
 void errorMessage() {
+    // Display error message based on which conditions failed
     uartUsb.write("Ignition inhibited.\r\n", 21);
     if (!driverSeatButton) {
         uartUsb.write( "Driver seat not occupied.\r\n", 27 );
@@ -91,6 +94,8 @@ void errorMessage() {
 }
 
 void checkIgnition() {
+    // Check if ignition conditions are met and turn 
+    // ignitionLED on or off based on the outcome
     if (driverSeatButton && driverBeltButton && passSeatButton && passBeltButton && !engineLed) {
         ignitionLed = ON;
     }
@@ -100,12 +105,17 @@ void checkIgnition() {
 }
 
 void onIgnition() {
+    // Determine outcome of ignition and display results
     if (ignitionLed) {
+        // Successful ignition turns on engine LED and
+        // displays start message
         ignitionLed = OFF;
         engineLed = ON;
         engineStartMessage();
     }
     else {
+        // Failed ignition displays error message and
+        // turns on alarm siren
         errorMessage();
         alarm.output();
         alarm = LOW;
